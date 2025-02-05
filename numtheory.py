@@ -1,4 +1,5 @@
 import typing
+from math import sqrt
 
 def phi(n):
     '''
