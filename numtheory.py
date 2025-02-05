@@ -148,5 +148,8 @@ def CRT(a1,a2,n1,n2):
         return "All parameters must be integers."
     if a1>=n1 or a2>=n2:
         return "Wrong values were inputted."
+    if n1==0 or n1==1 or n2==0 or n2==1:
+        return "Wrong values were inputted."
     
-    p,q
+    p,q=pow(n1,-1,n2),pow(n2,-1,n1)
+    return (a1*q*n2 + a2*p*n1)%(n1*n2)
