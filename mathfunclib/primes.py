@@ -84,6 +84,26 @@ def prime_factors(n):
             break
     return factors
 
+def spf_sieve(N):
+    '''
+    Smallest prime factor sieve.
+
+    :param N: An integer
+
+    :returns: An array such that arr[x] is the smallest
+              divisor of N.
+    '''
+    if type(N)!=int:
+        return "Parameter [N] must be an integer."
+    
+    spf=[i for i in range(N+1)]
+    for i in range(2,int(sqrt(N))+1):
+        if spf[i]==i:
+            for j in range(i*i,N+1,i):
+                if spf[j]==j:
+                    spf[j]=i
+    return spf
+
 def sum_of_primes(n):
     '''
     Fast sum of primes function.
@@ -125,7 +145,7 @@ def fermat_primality_test(n,tests=2):
         return "All parameters must be integers."
     if n<=1:
         return "Invalid value."
-    if tests<=1:
+    if tests<=0:
         return "Invalid number of tests."
     
     if n<10**5:
