@@ -1,5 +1,6 @@
 import typing
 from math import sqrt,gcd,floor
+from .simple import extended_euclid_alg
 
 def continued_frac_sqrt(x, limit=100):
     '''
@@ -153,3 +154,37 @@ def CRT(a1,a2,n1,n2):
     
     p,q=pow(n1,-1,n2),pow(n2,-1,n1)
     return (a1*q*n2 + a2*p*n1)%(n1*n2)
+
+def generalized_CRT(a1,a2,n1,n2):
+    '''
+    Implementation of the generalized Chinese Remainder Theorem.
+
+    :param a1: Integer
+    :param a2: Integer
+    :param n1: Integer
+    :param n2: Integer
+
+    :returns: The unique solution to x == a1 mod n1, x == a2 mod n2
+    '''
+    if type(a1)!=int or type(a2)!=int or type(n1)!=int or type(n2)!=int:
+        return "All parameters must be integers."
+    
+    g,u,v=extended_euclid_alg(n1,n2)
+    if g==1:
+        return ((a1*v*n2+a2*u*n1)//g)%(n1*n2)
+    M=(n1*n2)//g
+    if (a1%g)!=(a2%g):
+        return "No solution."
+    return ((a1*v*n2+a2*u*n1)//g)%M
+
+def partition(x,L,show=True):
+    '''
+    :param x: The number that we want to find partitions of.
+    :param L: List of numbers we can use for partitions.
+    :param show: Optional, default is true. If False, it shows
+                 how many partitions there are, else it outputs
+                 all the partitions.
+
+    :returns: #of partitions or all partitions based on the val
+              of [show].
+    '''
