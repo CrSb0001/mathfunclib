@@ -188,3 +188,30 @@ def partition(x,L,show=True):
     :returns: #of partitions or all partitions based on the val
               of [show].
     '''
+    if type(x)!=int:
+        return "Parameter [x] must be an integer."
+    if type(L)!=list:
+        return "Parameter [L] must be a list."
+    for i in range(len(L)):
+        if type(L[i])!=int:
+            return "[L] must only contain integers."
+    if show!=False and show!=True:
+        return "Parameter [show] must be either [True] or [False]."
+    
+    if 0 in L:
+        return "0 cannot be a part of L."
+    A=[0]*(x+1)
+    A[0]=1
+    P=[[]for _ in range(x+1)]
+    P[0]=[()]
+    for y in L:
+        for i in range(len(P)-y):
+            if show:
+                for z in P[i]:
+                    P[i+y].append((y,)+z)
+            else:
+                A[i+y]+=A[i]
+    if show:
+        return P[-1]
+    else:
+        return A[-1]
