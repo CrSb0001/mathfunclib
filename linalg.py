@@ -12,6 +12,39 @@ def argmax(_list):
     f=lambda i: _list[i]
     return max(range(len(_list)),key=f)
 
+def identity(mat,val=1):
+    '''
+    The identity matrix * val
+
+    :param mat: The size of the identity matrix to generate
+    :param val: Optional with default 1, val to replace row[x] with.
+    '''
+    if type(mat)!=int or type(val)!=int:
+        return "Both the required parameter and the optional parameter must be integers."
+
+    matrix=[]
+    for x in range(mat):
+        row = [0]*mat
+        row[x] = val
+        matrix.append(row)
+    return matrix
+
+def fillmatrix(size,val=0):
+    '''
+    Fills with a matrix with a value:
+
+    :param size: Tuple denoting the size of the matrix (width, height)
+    :param val: Value to fill the matrix with.
+
+    :returns: Matrix
+    '''
+    if type(size)!=tuple:
+        return '[size] must be a tuple.'
+    if type(val)!=int:
+        return '[val] must be an integer.'
+    
+    return [[val]*size[1] for _ in range(size[0])]
+
 def determinant(matrix,int_result=True,int_round=4):
     '''
     Returns the determinant of a square matrix.
@@ -95,10 +128,8 @@ def gauss_jordan_elim(matrix,aug_part=None,res_round=4):
     Performs Gauss Jordan Elimination on the given matrix.
 
     :param matrix: The matrix to perform the algorithm on.
-    
     :optional param aug_part: Will attach the argument onto the matrix
                               and then perform the algorithm.
-    
     :optional param res_round: Gives desired amount of accuracy. Will
                                take the integer part of the argument if
                                set to 0.
@@ -108,14 +139,14 @@ def gauss_jordan_elim(matrix,aug_part=None,res_round=4):
     Helper function for inverse and solve.
     '''
     if type(matrix)!=list:
-        return f"Input [matrix] must be a list, got \"{type(matrix)}\" instead."
+        return f"Input [matrix] must be a list, got type \"{type(matrix)}\" instead."
     if aug_part!=None:
         if type(aug_part)!=list:
-            return f"Optional param [aug_part] must be a list if not [None], got \"{type(aug_part)}\" instead."
+            return f"Optional param [aug_part] must be a list if not [None], got type \"{type(aug_part)}\" instead."
         else:
             matrix=concatenate(matrix,aug_part)
     if type(res_round)!=int:
-        return f"Optional param [res_round] expected to have type [int], got \"{type(res_round)}\" instead."
+        return f"Optional param [res_round] expected to have type [int], got type \"{type(res_round)}\" instead."
     
     m,n,h,k = len(matrix),len(matrix[0]),0,0
     while h < m and k < n:
@@ -157,3 +188,53 @@ def gauss_jordan_elim(matrix,aug_part=None,res_round=4):
             else:
                 matrix[y][x] = int(matrix[y][x])
     return True
+
+def solve(M,b,req_prec=0):
+    '''
+    Finds the solution, x, to the equation Mx==b
+
+    :param M: Matrix
+    :param b: Vector
+    :param req_prec: Optional parameter for required precision. Default is 0.
+
+    :returns: The vector x, or an error message.
+    '''
+    if type(M)!=list:
+        return f"Type [list] expected for matrix [M], found \"{type(M)}\" instead."
+    if type(b)!=list:
+        return f"Type [list] expected for vector [b], found \"{type(b)}\" instead."
+    if len(b[0])>1:
+        return f"[b] must be a vector, found length {len(b[0])} instead"
+    for i in range(1,len(b)):
+        if len(b[0])!=len(b[i]):
+            return "[b] must be a proper vector."
+    
+    m,n=len(M),len(M[0])
+    if len(M)!=len(b):
+        return "Impossible to solve."
+    if gauss_jordan_elim(M,b,None,req_prec):
+        return [M[x][n:]for x in range(m)]
+    else:
+        return "No solution or infinite solutions are possible."
+
+def inverse(matrix,req_prec=0):
+    '''
+    Finds the inverse of a matrix by performing Gauss-Jordan Elimination.
+
+    :param matrix: The matrix that is to be inverted.
+    :param req_prec: Optional parameter for required precision in the case
+                     of floats, default 0.
+
+    :returns: Inverted matrix.
+    '''
+    if type(matrix)!=list:
+        return f"Matrix must be of type [list], got type [{type(matrix)}] instead."
+    for i in range(len(matrix)):
+        if len(matrix)!=len(matrix[i]):
+            return "Matrix must be a square matrix."
+    
+    m=len(matrix)
+    if gauss_jordan_elim(matrix,identity(m),req_prec):
+        return [matrix[x][m:] for x in range(m)]
+    else:
+        return "Matrix does not have an inverse."
