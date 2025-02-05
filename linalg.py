@@ -45,6 +45,31 @@ def fillmatrix(size,val=0):
     
     return [[val]*size[1] for _ in range(size[0])]
 
+def matrix_add(A,B,subtract=False):
+    '''
+    Adds two matrices of the same size.
+
+    :param A: Matrix
+    :param B: Matrix
+    :param subtract: Optional parameter, subtracts the two matrices
+                     if True.
+    '''
+    if type(A)!=list or type(B)!=list:
+        return "Both matrices must be lists."
+    if subtract!=False and subtract!=True:
+        return f"Optional parameter [subtract] must be one of [True] or [False].\nGot {subtract} instead."
+    
+    m0,n0,m1,n1=len(A),len(A[0]),len(B),len(B[0])
+    for i in range(1,len(A)):
+        if len(A[0])!=len(A[i]):
+            return "Matrix A must be a proper matrix."
+    for i in range(1,len(B)):
+        if len(B[0])!=len(B[i]):
+            return "Matrix B must be a proper matrix."
+    
+    if m0!=m1 or n0!=n1:
+        return "Matrices are not the same size."
+
 def determinant(matrix,int_result=True,int_round=4):
     '''
     Returns the determinant of a square matrix.
