@@ -37,10 +37,7 @@ def num_to_base(n,b,to_str=False):
         if to_str:
             return str(n)
         else:
-            n=list(str(n))
-            for i in range(len(n)):
-                n[i]=int(n[i])
-            return n
+            return list(str(n))
     
     digits=[]
     while n!=0:
@@ -118,3 +115,109 @@ def simp_euclid_alg(a,b):
     while b>0:
         a,b=b,a%b
     return a
+
+def extended_euclid_alg(a,b):
+    '''
+    An implementation of the Extended Euclidean Algorithm.
+
+    :param a: Integer coefficient.
+    :param b: Integer coefficient.
+
+    :returns: A tuple (g,s,t) where gcd(a,b) == g == as+bt
+    '''
+    if type(a)!=int or type(b)!=int:
+        return "All parameters must be integers."
+    
+    old_r,r=a,b
+    old_s,s=1,0
+    while r!=0:
+        q = old_r//r
+        old_r,r=r,old_r-q*r
+        old_s,s=s,old_s-q*s
+    if b!=0:
+        bezout_t=(old_r-old_s*a)//b
+    else:
+        bezout_t=0
+    return old_r,old_s,bezout_t
+
+def lcm_list(_list):
+    '''
+    Finds the least common multiple of a list of integers.
+
+    :param _list: A list of integers.
+
+    :returns: The LCM of all of the integers.
+    '''
+    if type(_list)!=list:
+        return "Parameter [_list] must be a list."
+    for i in range(len(_list)):
+        if type(_list[i])!=int:
+            return "All elements of parameter [_list] must be integers."
+    
+    n=_list.sort()
+    curr=n.pop(-1)
+    while len(n)!=0:
+        temp=n.pop(-1)
+        curr=abs(curr*temp)//gcd(curr,temp)
+    return curr
+
+def bin_exp_mod(a,b,c,n,m=None):
+    '''
+    If (a+b*sqrt(c))^n (mod m) = x + y*sqrt(c), then this algorithm finds this
+    using binary exponentiation.
+
+    :param a: Integer coefficient on non-sqrt term.
+    :param b: Integer coefficient of sqrt term.
+    :param c: Integer coefficient inside sqrt term.
+    :param n: Integer exponent.
+    :param m: Integer coefficient of the modulus, optional.
+
+    :returns: Tuple (x,y) such that (a+b*sqrt(c))^n (mod m) = x + y*sqrt(c)
+    '''
+    if type(a)!=int or type(b)!=int or type(c)!=int or type(n)!=int:
+        return "All required parameters must be integers."
+    if m!=None and type(m)!=int:
+        return "Optional parameter [m] must be an integer if not [None]."
+    if n<0 or m<=1:
+        return "The exponent should be 1 or greater and the modulus should be greater than 1."
+    
+    if m==None:
+        a_res,b_res=a,b
+        for bit in bin(n)[3:]:
+            a_res,b_res=a_res*a_res+c*b_res*b_res,2*a_res*b_res
+            if bit=='1':
+                a_res,b_res=a*a_res+b*c*b_res,b*a_res+a*b_res
+    else:
+        a_res,b_res=a,b
+        for bit in bin(n)[3:]:
+            a_res,b_res=(a_res*a_res+c*b_res*b_res)%m,(2*a_res*b_res)%m
+            if bit=='1':
+                a_res,b_res=(a*a_res+b*c*b_res)%m,(b*a_res+a*b_res)%m
+    return a_res,b_res
+
+def bisector_right(_list,goal):
+    '''
+    An implementation of bisect_right from the bisect module.
+    This has been in Python since Python 3.9.
+
+    :param _list: A list of integers.
+    :param goal: An integer number.
+
+    :returns: index i of _list such that _list[i-1] < goal < _list[i]
+    '''
+    if type(_list)!=list:
+        return "Parameter [_list] must be a list."
+    for i in range(len(_list)):
+        if type(_list[i])!=int:
+            return "All elements of _list must be integers."
+    if type(goal)!=int:
+        return "Parameter [goal] must be an integer."
+    
+    lo,hi=0,len(_list)
+    while lo<hi:
+        mid=(lo+hi)//2
+        if goal<_list[mid]:
+            hi=mid
+        else:
+            lo=mid+1
+    return lo
