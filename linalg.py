@@ -69,6 +69,75 @@ def matrix_add(A,B,subtract=False):
     
     if m0!=m1 or n0!=n1:
         return "Matrices are not the same size."
+    else:
+        for x0 in range(m0):
+            for x1 in range(n0):
+                if subtract:
+                    A[x0][x1] -= B[x0][x1]
+                else:
+                    A[x0][x1] += B[x0][x1]
+    return A
+
+def mat_mul(A,B):
+    '''
+    Multiples two matrices together.
+    
+    If [A] and [B] are both n*n matrices, the result will
+    be an n*n matrix.
+    If [A] is r*s and [B] is s*t, then the result will be
+    an r*t matrix.
+    Else, we cannot multiply the matrices together.
+
+    :param A: Matrix
+    :param B: Matrix
+
+    :returns: Matrix A*B
+    '''
+    if type(A)!=list or type(B)!=list:
+        return "Both parameters [A] and [B] must be matrices."
+    for i in range(1,len(A)):
+        if len(A[0])!=len(A[i]):
+            return "Matrix [A] must be a proper matrix."
+    for i in range(1,len(B)):
+        if len(B[0])!=len(B[i]):
+            return "Matrix [B] must be a proper matrix."
+    
+    m0,n0,m1,n1=len(A),len(A[0]),len(B),len(B[0])
+    if n0!=m1:
+        return "Cannot multiply matrices."
+    
+    matrix=fillmatrix((m0,n1))
+    for row in range(m0):
+        for col in range(n1):
+            for itr in range(len(B)):
+                matrix[row][col] += A[row][itr]*B[itr][col]
+    return matrix
+
+def mat_pow(mat,pow):
+    '''
+    Matrix exponentiation.
+
+    :param mat: Matrix
+    :param pow: Power to raise the matrix to. Must be an integer.
+
+    :returns: Matrix mat**pow.
+    '''
+    if type(mat)!=list:
+        return "Parameter [mat] must be a matrix."
+    if type(pow)!=int or pow<=0:
+        return f"Either parameter [pow] is not of type 'int', or\nis an integer that could potentially return\n an incorrect result."
+    for i in range(1,len(mat)):
+        if len(mat[0])!=len(mat[i]):
+            return "Parameter [mat] must be a proper matrix."
+    if len(mat[0])!=len(mat):
+        return "Parameter [mat] must be a square matrix."
+    
+    mat_res=mat
+    for bit in bin(pow)[3:]:
+        mat_res=mat_mul(mat_res,mat_res)
+        if bit=='1':
+            mat_res=mat_mul(mat_res,mat)
+    return mat_res
 
 def determinant(matrix,int_result=True,int_round=4):
     '''
