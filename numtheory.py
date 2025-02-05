@@ -1,5 +1,57 @@
 import typing
-from math import sqrt
+from math import sqrt,gcd,floor
+
+def continued_frac_sqrt(x, limit=100):
+    '''
+    Returns the continued fraction for the
+    square root of our input, x.
+    
+    :param x: an integer
+    :param limit: (optional) The max amount of terms in the expansion
+    
+    :returns: A list containg the cont. frac. expansion of sqrt(x)
+    
+    Stops automatically if we reach {limit} number of terms (default: 100)
+    '''
+    if type(x) != int or type(limit) != int:
+        return "All values must be integers"
+    
+    m0,d0,a0 = 0,1,floor(sqrt(x))
+    temp_list = [a0]
+    
+    while True:
+        mn = int(d0*a0-m0)
+        dn = int((x-mn**2)/d0)
+        an = int(floor((sqrt(x)+mn)/dn))
+        temp_list.append(an)
+        if an == 2*floor(sqrt(x)):
+            break
+        if len(temp_list) == limit:
+            break
+        m0,d0,a0=mn,dn,an
+    return temp_list
+
+def overall_frac(cf):
+    '''
+    :param cf: Continued fraction of a number
+
+    :returns numerator: An integer that represents the numerator of the fraction
+    :returns denominator: An integer that represent the denominator of the fraction.
+    '''
+    if type(cf)!=list:
+        return "Parameter [cf] must be a list."
+    if len(cf)==0:
+        return "Parameter [cf] must have items in its list"
+    for i in range(len(cf)):
+        if type(cf[i])!=int:
+            return "Paramter [cf] must only contain integers."
+    
+    cf=cf[::-1]
+    denominator=1
+    numerator=cf[0]
+    for x in range(1,len(cf)):
+        numerator,denominator=cf[x]*numerator+denominator,numerator
+    return numerator,denominator
 
 def phi(n):
     '''
@@ -56,8 +108,45 @@ def pythagorean_triples(lim,non_prim=False):
     Generates all Pythagorean triplets up to [limit].
 
     :param lim: Integer, limit for up to which Pythagorean Triples can be generated.
-    :param non_prim: Bool, generates all triples if set to [True], else only generates
-                     primitive triplets.
+    :param non_prim: Optional bool, generates all triples if set to [True], else only generates
+                     primitive triplets. Set to [False] by default.
 
     :returns: A list containing all desired triplets.
     '''
+    if type(lim)!=int:
+        return "Paramter [lim] must be an integer."
+    if non_prim!=False and non_prim!=True:
+        return "Paramter [non_prim] must be one of [True] or [False]"
+    
+    triples=[]
+    for m in range(2,int(sqrt(lim))+1):
+        for n in range(1+(m%2),m,2):
+            if gcd(m,n)==1:
+                a=m**2+n**2
+                b=m**2-n**2
+                c=m*n*2
+                if a<limit:
+                    if non_prim:
+                        for k in range(1,int(lim/a)+1):
+                            triples.append([k*b,k*c,k*a])
+                    else:
+                        triples.append([b,c,a])
+    return triples
+
+def CRT(a1,a2,n1,n2):
+    '''
+    Simple implementation of the Chinese Remainder Theorem.
+
+    :param a1: Integer
+    :param a2: Integer
+    :param n1: Integer
+    :param n2: Integer
+
+    :returns: The unique solution to x == a1 mod n1, x == a2 mod n2.
+    '''
+    if type(a1)!=int or type(a2)!=int or type(n1)!=int or type(n2)!=int:
+        return "All parameters must be integers."
+    if a1>=n1 or a2>=n2:
+        return "Wrong values were inputted."
+    
+    p,q
