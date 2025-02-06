@@ -74,3 +74,80 @@ def decryp_rotN(_str,N=13):
         else:
             RotN+=i
     return RotN
+
+def upper_to_lower(_str):
+    '''
+    Returns the string with no uppercase letters.
+
+    :param _str: The input string
+
+    :returns: A string with no uppercase letters.
+
+    If anything not really helpful except for being
+    a helper function.
+    '''
+    UPPERCASE_LETTERS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+    LOWERCASE_LETTERS = 'abcdefghijklmnopqrstuvwxyz'
+    
+    if type(_str)!=str:
+        return "Parameter [_str] must be a string."
+    
+    u_to_l=''
+    for i in _str:
+        if i in UPPERCASE_LETTERS:
+            u_to_l+=LOWERCASE_LETTERS[UPPERCASE_LETTERS.index(i)]
+        else:
+            u_to_l+=i
+    return u_to_l
+
+def lower_to_upper(_str):
+    '''
+    Returns the string with no lowercase letters.
+
+    :param _str: The input string.
+
+    :returns: A string with no lowercase letters.
+
+    Also not really that useful except for being
+    a helper function.
+    '''
+    UPPERCASE_LETTERS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+    LOWERCASE_LETTERS = 'abcdefghijklmnopqrstuvwxyz'
+    
+    if type(_str)!=str:
+        return "Parameter [_str] must be a string."
+    
+    l_to_u=''
+    for i in _str:
+        if i in LOWERCASE_LETTERS:
+            l_to_u+=UPPERCASE_LETTERS[LOWERCASE_LETTERS.index(i)]
+        else:
+            l_to_u+=i
+    return l_to_u
+
+def char_count(_str,LETTERS='ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'):
+    '''
+    Returns the character count of a string as a dict.
+
+    :param _str: The input string.
+    :param LETTERS: Optional, default is the capital English letters
+                    followed by the lowercase English letters.
+                    You can modify this if using this with index
+                    of coincidence functions.
+
+    :returns: The character count of the string.
+    '''
+    if type(_str)!=str:
+        return "Parameter [_str] must be a string."
+    if type(LETTERS)!=str:
+        return "Optional parameter [LETTERS] must be a string."
+    
+    d={}
+    for i in LETTERS:
+        d[i]=0
+    for i in _str:
+        if i in d:
+            d[i]+=1
+        else:
+            continue
+    return d
