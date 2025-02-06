@@ -127,7 +127,7 @@ def lower_to_upper(_str):
 
 def char_count(_str,LETTERS='ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'):
     '''
-    Returns the character count of a string as a dict.
+    Returns the count of each character of a string as a dict.
 
     :param _str: The input string.
     :param LETTERS: Optional, default is the capital English letters
@@ -135,7 +135,7 @@ def char_count(_str,LETTERS='ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxy
                     You can modify this if using this with index
                     of coincidence functions.
 
-    :returns: The character count of the string.
+    :returns: The count of each character as a dict.
     '''
     if type(_str)!=str:
         return "Parameter [_str] must be a string."
