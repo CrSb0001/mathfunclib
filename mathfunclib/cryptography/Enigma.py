@@ -109,3 +109,4 @@ def create_reflector(name):
         # Default "Identity" Reflector
         "Identity": Reflector("ZYXWVUTSRQPONMLKJIHGFEDCBA")
     }
+    return ref_list.get(name, "Identity")
