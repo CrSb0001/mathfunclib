@@ -1,4 +1,3 @@
-import typing
 from math import sqrt
 
 def is_prime(n):
