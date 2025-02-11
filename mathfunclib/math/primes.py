@@ -13,15 +13,15 @@ def is_prime(n):
     if type(n)!=int:
         return "Parameter must be an integer."
     
-    if x<=1:
+    if n<=1:
         return False
-    elif x<=3:
+    elif n<=3:
         return True
-    elif x%2==0:
+    elif n%2==0:
         return False
     else:
-        for i in range(3,int(sqrt(x))+1,2):
-            if x%i==0:
+        for i in range(3,int(sqrt(n))+1,2):
+            if n%i==0:
                 return False
         return True
 
@@ -42,12 +42,12 @@ def prime_sieve(lim,val=True):
 
     p_list=[]
     if val:
-        for i in range(2,limit+1):
+        for i in range(2,lim+1):
             if isprime(i):
                 p_list.append(i)
         return p_list
     else:
-        for i in range(limit+1):
+        for i in range(lim+1):
             if isprime(i):
                 p_list.append(True)
             else:
