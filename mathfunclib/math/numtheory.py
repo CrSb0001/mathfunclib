@@ -1,4 +1,3 @@
-import typing
 from math import sqrt,gcd,floor
 from .simple import extended_euclid_alg
 
