@@ -1,4 +1,3 @@
-import typing
 from math import gcd
 
 def num_to_base(n,b,to_str=False):
