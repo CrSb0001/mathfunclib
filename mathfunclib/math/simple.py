@@ -195,7 +195,7 @@ def bin_exp_mod(a,b,c,n,m=None):
                 a_res,b_res=(a*a_res+b*c*b_res)%m,(b*a_res+a*b_res)%m
     return a_res,b_res
 
-def bisector_right(_list,goal):
+def bisector_right(_list,goal,lo=0,hi=None):
     '''
     An implementation of bisect_right from the bisect module.
     This has been in Python since Python 3.9.
@@ -212,8 +212,11 @@ def bisector_right(_list,goal):
             return "All elements of _list must be integers."
     if type(goal)!=int:
         return "Parameter [goal] must be an integer."
-    
-    lo,hi=0,len(_list)
+
+    if lo<0:
+        raise ValueError('Parameter [lo] must be a non_negative integer.')
+    if hi is None:
+        hi = len(_list)
     while lo<hi:
         mid=(lo+hi)//2
         if goal<_list[mid]:
@@ -221,3 +224,39 @@ def bisector_right(_list,goal):
         else:
             lo=mid+1
     return lo
+
+def bisector_left(_list,goal,lo=0,hi=None):
+    '''
+    An implementation of bisect_left form the bisect module.
+    This has been in Python since Python 3.9.
+    
+    :param _list: A list of integers.
+    :param goal: An integer number
+    '''
+    if type(_list)!=list:
+        return "Parameter [_list] must be a list."
+    for i in range(len(_list)):
+        if type(_list[i])!=int:
+            return "All elements of _list must be integers."
+    if type(goal)!=int:
+        return "Parameter [goal] must be an integer."
+    
+    if lo<0:
+        raise ValueError('Parameter [lo] must be a non_negative integer')
+    if hi is None:
+        hi = len(_list)
+    while lo<hi:
+        mid = (lo+hi)//2
+        if _list[mid]<goal:
+            lo = mid+1
+        else:
+            hi = mid
+    return lo
+
+def insorter_right(_list,x,lo=0,hi=None):
+    lo=bisector_right(_list,x,lo,hi)
+    _list.insert(lo,x)
+
+def insorter_left(_list,x,lo=0,hi=None):
+    lo = bisector_left(_list,x,lo,hi)
+    _list.insert(lo,x)
