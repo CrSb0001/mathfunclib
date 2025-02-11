@@ -1,4 +1,3 @@
-import typing
 from .simple import is_clockwise
 
 def prims_algo(matrix):
