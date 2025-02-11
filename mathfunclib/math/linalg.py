@@ -1,5 +1,3 @@
-import typing
-
 def argmax(_list):
     '''
     Finds the argmax of a list.
