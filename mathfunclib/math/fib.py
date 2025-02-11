@@ -1,5 +1,3 @@
-import typing
-
 def fibonacci(n,m=None):
     '''
     Finds the n-th Fibonacci number using matrix exponentiation by squaring
