@@ -1,5 +1,3 @@
-import typing
-
 def encryp_rot13(_str):
     '''
     Encrypts a string using ROT13
