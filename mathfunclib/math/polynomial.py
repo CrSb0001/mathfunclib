@@ -1,5 +1,7 @@
 import typing
 
+# Really I do enjoy (and prefer!) using numpy, but if anything I'm only making this so it's easier to see how exactly these functions work.
+
 def poly_val(_list,x_int=0):
     '''
     Evaluates a polynomial at a specific point.
@@ -90,11 +92,11 @@ def poly_int(_list,k=0,req_prec=0,to_poly=False):
     '''
     Returns the antiderivative of the coefficients
     of a polynomial represented by a list.
-
+    
     Parameter [k] is by default 0, but can be
     changed to be any number (float or integer) as
     desired.
-
+    
     Parameter [req_prec) is by default 0, and represents
     the required precision for each element of the antiderivative.
     If this is equal to 0, we take each element of _list and make it
