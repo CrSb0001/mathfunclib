@@ -1,6 +1,5 @@
 # Some miscellaneous functions that can come in handy for Project Euler problems.
 
-import typing
 from math import cos,sin,sqrt,exp,ceil,floor,pi,gcd
 from decimal import *
 
