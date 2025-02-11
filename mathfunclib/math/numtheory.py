@@ -126,7 +126,7 @@ def pythagorean_triples(lim,non_prim=False):
                 a=m**2+n**2
                 b=m**2-n**2
                 c=m*n*2
-                if a<limit:
+                if a<lim:
                     if non_prim:
                         for k in range(1,int(lim/a)+1):
                             triples.append([k*b,k*c,k*a])
@@ -148,9 +148,9 @@ def CRT(a1,a2,n1,n2):
     if type(a1)!=int or type(a2)!=int or type(n1)!=int or type(n2)!=int:
         return "All parameters must be integers."
     if a1>=n1 or a2>=n2:
-        return "Wrong values were inputted."
+        return "Wrong values were inputted for [a1], [a2]."
     if n1==0 or n1==1 or n2==0 or n2==1:
-        return "Wrong values were inputted."
+        return "Wrong values were inputted for [n1], [n2]."
     
     p,q=pow(n1,-1,n2),pow(n2,-1,n1)
     return (a1*q*n2 + a2*p*n1)%(n1*n2)
