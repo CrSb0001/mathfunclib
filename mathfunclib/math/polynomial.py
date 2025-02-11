@@ -1,5 +1,3 @@
-import typing
-
 # Really I do enjoy (and prefer!) using numpy, but if anything I'm only making this so it's easier to see how exactly these functions work.
 
 def poly_val(_list,x_int=0):
