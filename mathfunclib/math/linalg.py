@@ -151,7 +151,7 @@ def determinant(matrix,int_result=True,int_round=4):
     '''
     if type(matrix)!=list:
         return "Please input a list"
-    if type(int_result)!=bool or int_result not in [True,False]:
+    if type(int_result)!=bool or (int_result not in [True,False]):
         return f"Expected one of [True] or [False] for int_result, got '{int_result}' instead."
     if type(int_round)!=int:
         return f"Expected an integer type for int_round, got type\"{type(int_round)}\" instead."
@@ -319,10 +319,13 @@ def inverse(matrix,req_prec=0):
     :param req_prec: Optional parameter for required precision in the case
                      of floats, default 0.
 
-    :returns: Inverted matrix.
+    :returns: Inverted matrix if the matrix has an inverse.
     '''
     if type(matrix)!=list:
         return f"Matrix must be of type [list], got type [{type(matrix)}] instead."
+    if type(req_prec)!=int:
+        return f"Parameter [req_prec] must be of type [int], got type [{type(req_prec)}] instead."
+    
     for i in range(len(matrix)):
         if len(matrix)!=len(matrix[i]):
             return "Matrix must be a square matrix."
