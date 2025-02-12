@@ -124,3 +124,86 @@ def convex_hull_gift_wrapping(pts):
                     else:
                         convex_hull.append(q)
     return convex_hull
+
+def convex_hull_DC(pts):
+    '''
+    Implementation of the Convex Hull Divide and conquer Algorithm
+    '''
+    if type(pts)!=list:
+        return "Paramter [list] must be a list."
+    for i in range(len(pts)):
+        if type(pts[i])!=tuple:
+            return "[pts] may only contains 2D tuples as the input."
+    
+    x_sort = sorted(pts)
+    def divideCH(alist):
+        l = len(alist)
+        if l <= 5:
+            return convex_hull_gift_wrapping(alist)
+        mid = l//2
+        left = divideCH(alist[:mid])
+        right = divideCH(alist[mid:])
+        return mergeCH(left, right)
+
+    def mergeCH(left, right):
+        top_r = max(left) 
+        top_l = min(right) 
+        bot_r = top_r
+        bot_l = top_l
+            
+        curr_right_index = right.index(top_l)
+        curr_left_index = left.index(top_r)
+        
+        hull_copy = left[:curr_left_index + 1] + right[curr_right_index:] + right[curr_right_index:curr_right_index + 1] + left[curr_left_index:]
+        len_h = len(hull_copy)
+        
+        top_r_index = curr_left_index
+        top_l_index = top_r_index + 1
+        bot_l_index = top_l_index + len(right)
+        bot_r_index = bot_l_index + 1
+        
+        prev_r = None
+        prev_l = None
+        while True:
+            prev_r = top_r
+            prev_l = top_l
+            while is_clockwise(top_r, top_l, hull_copy[top_l_index + 1]) == False:
+                top_l_index += 1
+                top_l = hull_copy[top_l_index]
+
+            while is_clockwise(top_l, top_r, hull_copy[top_r_index - 1]):
+                top_r_index -= 1            
+                top_r = hull_copy[top_r_index]
+            
+            if top_r == prev_r and top_l == prev_l:
+                break
+        
+        prev_r = None
+        prev_l = None
+        while True:
+            prev_r = bot_r
+            prev_l = bot_l
+            
+            while is_clockwise(bot_r, bot_l, hull_copy[bot_l_index - 1]):
+                bot_l_index -= 1
+                bot_l = hull_copy[bot_l_index]
+                
+            while True:
+                if bot_r_index + 1 < len_h:
+                    if is_clockwise(bot_l, bot_r, hull_copy[bot_r_index + 1]) == False:
+                        bot_r_index += 1
+                        bot_r = hull_copy[bot_r_index]
+                    else:
+                        break
+                else:
+                    bot_r_index = -1     
+            if bot_r == prev_r and bot_l == prev_l:
+                break
+        
+        if bot_r_index == 0:
+            convex_hull = hull_copy[0:top_r_index + 1] + hull_copy[top_l_index:bot_l_index + 1]
+        else:
+            convex_hull = hull_copy[0:top_r_index + 1] + hull_copy[top_l_index:bot_l_index + 1] + hull_copy[bot_r_index:]
+        return convex_hull 
+    
+    return divideCH(x_sort)
