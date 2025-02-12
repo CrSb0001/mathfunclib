@@ -94,3 +94,33 @@ def floyd_warshall_algo(graph,INFINITY=float('inf')):
             for j in range(n):
                 D[k+1][i][j] = min(D[k][i][j],D[k][i][k]+D[k][k][j])
     return D[n][:][:]
+
+def convex_hull_gift_wrapping(pts):
+    '''
+    Implementation of the Convex Hull Gift Wrapping Algorithm
+    '''
+    if type(pts)!=list:
+        return "Parameter [pts] must be a list."
+    for i in range(len(pts)):
+        if type(pts[i])!=tuple:
+            return "[pts] must contain only 2D tuples as the input."
+    
+    lp = min(pts)
+    convex_hull=[lp]
+    hull_not_finished = True
+    while hull_not_finished:
+        p = convex_hull[-1]
+        for q in pts:
+            if q!=p:
+                flag = True
+                for r in pts:
+                    if r!=p and r!=q:
+                        if is_clockwise(p,q,r) == False:
+                            flag = False
+                            break
+                if flag:
+                    if q==lp:
+                        hull_not_finished = False
+                    else:
+                        convex_hull.append(q)
+    return convex_hull
