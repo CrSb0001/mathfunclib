@@ -333,3 +333,43 @@ def inverse(matrix,req_prec=0):
         return [matrix[x][m:] for x in range(m)]
     else:
         return "Matrix does not have an inverse."
+
+def transpose(matrix):
+    '''
+    Finds the transpose of a matrix.
+    '''
+    if type(matrix)!=list:
+        return f"Matrix must be of type [list], got type [{type(matrix)}] instead."
+    for i in range(1,len(matrix)):
+        if len(matrix[i])!=len(matrix[0]):
+            return "All rows of [matrix] must have the same length."
+    
+    transpose=[[0 for _ in range(len(matrix))] for _ in range(len(matrix[0]))]
+    for i in range(len(matrix)):
+        for j in range(len(matrix[0])):
+            transpose[j][i]=matrix[i][j]
+    return transpose
+
+def pseudo_inv(matrix,req_prec=0):
+    '''
+    Finds the pseudoinverse of a matrix ((transpose(A)*A)^{-1})*transpose(A) == A^+.
+    If a square matrix is input, then it uses inverse() to find it.
+    '''
+    if type(matrix)!=list:
+        return f"Matrix must be of type [list], got type [{type(matrix)}] instead."
+    if type(req_prec)!=int:
+        return f"Parameter [req_prec] must be of type [int], got type [{type(req_prec)}] instead."
+    for i in range(1,len(matrix)):
+        if len(matrix[i])!=len(matrix[0]):
+            return "All rows of [matrix] must have the same length."
+    
+    if len(matrix)==len(matrix[0]):
+        return inverse(matrix,req_prec)
+    else:
+        temp_mat = mat_mul(transpose(matrix),matrix)
+        if gauss_jordan_elim(temp_mat,identity(len(temp_mat)),req_prec):
+            m=len(temp_mat)
+            temp_mat=[temp_mat[x][m:] for x in range(m)] # temp_mat == inverse(transpose(matrix)*matrix)
+            return mat_mul(temp_mat,transpose(matrix))
+        else:
+            return "Matrix does not have a pseudoinverse."
