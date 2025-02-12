@@ -524,6 +524,6 @@ def gram_schmidt(matrix,int_res):
             Q[i][j] = q[i]
     
     if int_res:
-        Q = [[int(Q[i][j]) for _ in range(len(Q))]for _ in range(len(Q[0]))]
-        R = [[int(R[i][j]) for _ in range(len(R))]for _ in range(len(R[0]))]
+        Q = [[int(Q[i][j]) for _ in range(len(Q[0]))]for _ in range(len(Q))]
+        R = [[int(R[i][j]) for _ in range(len(R[0]))]for _ in range(len(R))]
     return Q,R
