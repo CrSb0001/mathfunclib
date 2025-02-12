@@ -101,3 +101,22 @@ def sqrt_dec_expn_sum(n,d):
     getcontext().prec = d+5
     v = str(Decimal(n).sqrt())[2:p+2]
     return sum(int(x) for x in v)
+
+def is_stealthy(n):
+    '''
+    AKA bipronic numbers (OEIS A072389), this function finds numbers
+    of the form x*(x+1)*y*(y+1) for nonnegative x,y, and where x!=y. We initialize the
+    sequence with 0 == 0*(0+1)*1*(1+1).
+    '''
+    if type(n)!=int:
+        return "Parameter [n] must be an integer."
+    
+    if n==0:
+        return True
+    if n<0:
+        return False
+    for i in range(1,n//2+2):
+        for j in range(1,i+1):
+            if i*(i+1)*j*(j+1):
+                return True
+    return False
