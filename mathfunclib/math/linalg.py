@@ -492,8 +492,8 @@ def LU_decomp_mat(matrix,int_res=False):
                     _sum += L[k][j]*U[j][i]
                 L[k][i] = (matrix[k][i] - sum) / U[j][i]
     if int_res:
-        L = [[int(L[i][j]) for i in range(len(L))] for j in range(len(L))]
-        U = [[int(U[i][j]) for i in range(len(U))] for j in range(len(U))]
+        L = [[int(L[i][j]) for j in range(len(L))] for i in range(len(L))]
+        U = [[int(U[i][j]) for j in range(len(U))] for i in range(len(U))]
     return L,U
 
 def gram_schmidt(matrix,int_res):
@@ -524,6 +524,6 @@ def gram_schmidt(matrix,int_res):
             Q[i][j] = q[i]
     
     if int_res:
-        Q = [[int(Q[i][j]) for _ in range(len(Q[0]))]for _ in range(len(Q))]
-        R = [[int(R[i][j]) for _ in range(len(R[0]))]for _ in range(len(R))]
+        Q = [[int(Q[i][j]) for j in range(len(Q[0]))]for i in range(len(Q))]
+        R = [[int(R[i][j]) for j in range(len(R[0]))]for i in range(len(R))]
     return Q,R
