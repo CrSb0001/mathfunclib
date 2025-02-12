@@ -34,7 +34,7 @@ def divisors(n,proper=False):
         return div
     return div
 
-def signma(x,n):
+def sigma(x,n):
     '''
     Implementation of the divisor function sigma(x,n).
     '''
