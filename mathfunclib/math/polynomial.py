@@ -11,7 +11,7 @@ def poly_val(_list,x_int=0):
     if type(_list)!=list:
         return f"Parameter [_list] must be a list, got type \"{type(_list)}\" instead."
     for i in range(len(_list)):
-        if type(_list[i])!=int or type(_list[i])!=float:
+        if type(_list[i])!=int and type(_list[i])!=float:
             return "All values of parameter [_list] must be floats if not integers."
     if type(x_int)!=int and x_int!=None:
         return "Parameter [x_int] must be an integer if not None."
