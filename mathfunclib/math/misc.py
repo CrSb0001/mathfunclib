@@ -60,3 +60,24 @@ def sum_multiples_under_lim(m,n,lim):
             else:
                 return f'{q}/{r}'
     return res(m,lim)+res(n,lim)-res(n*m,lim) if lim!=float('inf') else res(n,m,lim)
+
+def last_nzero_digit_n_fac(n):
+    '''
+    Computes the last nonzero digit of n! = n*(n-1)*(n-2)*(n-3)*...*3*2*1,
+    where 0! == 1! == 1.
+    
+    Usually, we can only compute the last nonzero digit of up to around (10**697)!
+    due to recursion limitations, but we can add the following setup beforehand
+    to compute up to the last nonzero digit of (10**40000)! correctly before we
+    start to run into issues with time limits:
+    ```
+    import resource,sys
+    from functools import lru_cache
+    resource.setrlimit(resource.RLIMIT_STACK,(2**29,-1))
+    sys.setrecursionlimit(10**9)
+    
+    @lru_cache
+    # our function here
+    ```
+    '''
+    return int('1126422428'[n]) if 0<=n<10 else int('2486'[(n//5-1)%4])*last_nzero_digit_n_fac(n//5)*last_nzero_digit_n_fac(n%5)%10
