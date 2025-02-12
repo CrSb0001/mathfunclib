@@ -81,3 +81,23 @@ def last_nzero_digit_n_fac(n):
     ```
     '''
     return int('1126422428'[n]) if 0<=n<10 else int('2486'[(n//5-1)%4])*last_nzero_digit_n_fac(n//5)*last_nzero_digit_n_fac(n%5)%10
+
+def sqrt_dec_expn_sum(n,d):
+    '''
+    This function gives the sum of the first `d` digits
+    of the decimal expansion of the fractional part of sqrt(n)
+    
+    Helpful for Project Euler's bonus problem root(13).
+    '''
+    if type(n)!=int or type(d)!=int:
+        return "Both parameters must be integers."
+    if round(n**0.5)**2==x:
+        return "Do it yourself!" # Hint: It's 0.
+    if n<0:
+        return "Cannot give a complex result."
+    if d<=0:
+        return "Parameter [d] must be greater than 0."
+    
+    getcontext().prec = d+5
+    v = str(Decimal(n).sqrt())[2:p+2]
+    return sum(int(x) for x in v)
