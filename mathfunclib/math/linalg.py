@@ -1,3 +1,5 @@
+from polynomial import poly_val
+
 def argmax(_list):
     '''
     Finds the argmax of a list.
@@ -159,20 +161,16 @@ def determinant(matrix,int_result=True,int_round=4):
             return "Please input a square matrix"
     
     h,k,det,m,n=0,0,1,len(matrix),len(matrix[0])
-    
     while h<m and k<n:
         i_max = argmax([abs(matrix[i][k]) for i in range(h,m)])+h
-
         if matrix[i_max][k]==0:
             k+=1
-
         else:
             if h!=i_max:
                 temp_row=matrix[i_max]
                 matrix[i_max]=matrix[h]
                 matrix[h]=temp_row
                 det*=-1
-
             for i in range(h+1,m):
                 f=matrix[i][k]/matrix[h][k]
                 matrix[i][k]=0
@@ -180,7 +178,6 @@ def determinant(matrix,int_result=True,int_round=4):
                     matrix[i][j]-=f*matrix[h][j]
             h+=1
             k+=1
-
     for i in range(m):
         det*=matrix[i][i]
     return int(det) if int_result else round(det,int_round)
@@ -373,3 +370,46 @@ def pseudo_inv(matrix,req_prec=0):
             return mat_mul(temp_mat,transpose(matrix))
         else:
             return "Matrix does not have a pseudoinverse."
+
+def get_mat_minor(matrix,i,j):
+    '''
+    Originally was supposed to be a helper function
+    for characteristic_poly(matrix), but idk what I'm going
+    to use it for since I've already implemented it without the
+    help of it.
+    '''
+    return [row[:j]+row[j+1:]for row in (matrix[:i]+matrix[i+1:])]
+
+def characteristic_poly(matrix,req_prec=2,to_poly=False):
+    '''
+    Returns the characteristic polynomial of a matrix.
+    '''
+    if type(matrix)!=list:
+        return "Parameter [matrix] must be a list."
+    if type(req_prec)!=int:
+        return "Parameter [req_prec] must be an integer."
+    if to_poly not in [True, False]:
+        return "Parameter [to_poly] must either be True or False. By default this is False."
+    for i in range(1,len(matrix)):
+        if len(matrix[0])!=len(matrix[i]):
+            return "All rows of [matrix] must have the same length."
+    if len(matrix)!=len(matrix[0]):
+        return "[matrix] must be a square matrix."
+    
+    _len = len(matrix)
+    x = 'x'
+    iden = identity(_len)
+    
+    # Init polynomial coefficients
+    coefficients = [0] * (_len + 1)
+    coefficients[-1] = determinant(matrix,False,req_prec)*((-1)**(_len))
+    
+    # Find the coefficients
+    for k in range(1,_len+1):
+        sub_mat = [[matrix[i][j] - (x if i == j else 0) for j in range(_len)] for i in range(_len)]
+        coefficients[-k-1] = determinant(sub_mat,False,req_prec) * ((-1)**(_len-k))
+    
+    # Construct the polynomial if to_poly == True
+    if to_poly:
+        return poly_val(coefficients,None)
+    return coefficients
