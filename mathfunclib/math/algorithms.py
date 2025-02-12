@@ -1,6 +1,6 @@
 from .simple import is_clockwise
 
-def prims_algo(matrix):
+def prims_algorithm(matrix):
     '''
     Implementation of "Prim's Algorithm".
     
@@ -68,3 +68,29 @@ def dijkstras_algorithm(graph,start_node=0,INFINITY=float('inf')):
         if flag:
             break
     return D
+
+def floyd_warshall_algo(graph,INFINITY=float('inf')):
+    '''
+    Implementation of the Floyd-Warshall algorithm.
+    This finds the shortest path between every node
+    in the graph to every node in the graph.
+    
+    It's like applying Djikstra's Algorithm to every
+    node in the graph.
+    '''
+    if type(graph)!=list:
+        return "Parameter [graph] must be a list."
+    if INFINITY!=float('inf') and type(INFINITY)!=int:
+        return "Parameter [INFINITY] must be an integer if not float('inf')."
+    
+    n = len(graph)
+    D = [[[INFINITY for i in range(n)] for j in range(n)] for k in range(n+1)]
+    for v in range(n):
+        D[0][v][v] = 0
+        for e,w in graph[v]:
+            D[0][v][e] = w
+    for k in range(n):
+        for i in range(n):
+            for j in range(n):
+                D[k+1][i][j] = min(D[k][i][j],D[k][i][k]+D[k][k][j])
+    return D[n][:][:]
