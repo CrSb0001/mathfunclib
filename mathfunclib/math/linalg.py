@@ -225,7 +225,7 @@ def gauss_jordan_elim(matrix,aug_part=None,res_round=4):
     
     :returns: True if the operation was successful, False otherwise.
 
-    Helper function for inverse and solve.
+    Helper function for inverse, solve and pseudo_inv.
     '''
     if type(matrix)!=list:
         return f"Input [matrix] must be a list, got type \"{type(matrix)}\" instead."
@@ -373,12 +373,9 @@ def pseudo_inv(matrix,req_prec=0):
 
 def get_mat_minor(matrix,i,j):
     '''
-    Originally was supposed to be a helper function
-    for characteristic_poly(matrix), but idk what I'm going
-    to use it for since I've already implemented it without the
-    help of it.
+    Used for finding the cofactor matrix.
     '''
-    return [row[:j]+row[j+1:]for row in (matrix[:i]+matrix[i+1:])]
+    return ((-1)**(i+j))*determinant([row[:j]+row[j+1:]for row in (matrix[:i]+matrix[i+1:])])
 
 def characteristic_poly(matrix,req_prec=2,to_poly=False):
     '''
@@ -397,7 +394,6 @@ def characteristic_poly(matrix,req_prec=2,to_poly=False):
         return "[matrix] must be a square matrix."
     
     _len = len(matrix)
-    x = 'x'
     iden = identity(_len)
     
     # Init polynomial coefficients
@@ -413,3 +409,65 @@ def characteristic_poly(matrix,req_prec=2,to_poly=False):
     if to_poly:
         return poly_val(coefficients,None)
     return coefficients
+
+def cofactor_mat(matrix):
+    '''
+    Returns the matrix of cofactors of a matrix
+    '''
+    if type(matrix)!=list:
+        return "Parameter [matrix] must be a list."
+    for i in range(1,len(matrix)):
+        if len(matrix[0])!=len(matrix[i]):
+            return "Matrix must have the length of all rows equal to each other."
+    if len(matrix)!=len(matrix[0]):
+        return "Matrix must be square."
+    
+    return [[get_mat_minor(matrix,i,j) for i in range(len(matrix))] for j in range(len(matrix))]
+
+def adjugate_mat(matrix):
+    '''
+    Returns the adjugate of a matrix, that is transpose(C),
+    where C == cofactor_mat(matrix)
+    '''
+    if type(matrix)!=list:
+        return "Parameter [matrix] must be a list."
+    for i in range(1,len(matrix)):
+        if len(matrix[0])!=len(matrix[i]):
+            return "Matrix must have the length of all rows equal to each other."
+    if len(matrix)!=len(matrix[0]):
+        return "Matrix must be square."
+    
+    return transpose(cofactor_mat(matrix))
+
+def LU_decomp_mat(matrix,int_res=False):
+    '''
+    Returns the LU decomposition of a square matrix.
+    '''
+    if type(matrix)!=list:
+        return "Parameter [matrix] must be a list."
+    for i in range(len(matrix)):
+        if len(matrix)!=len(matrix[i]):
+            return "Matrix must be square as implementhing this for nonsquare matrices is going to be difficult."
+    
+    n,L,U = len(matrix),[[0.0]*n for _ in range(n)],[[0.0]*n for _ in range(n)]
+    for i in range(n):
+        # Upper Triangular
+        for k in range(i,n):
+            _sum = 0.0
+            for j in range(i):
+                _sum += L[i][j]*U[j][k]
+            U[i][k] = matrix[i][k] - _sum
+        
+        # Lower Triangular
+        for k in range(i,n):
+            if i == k:
+                L[i][i] == 1.0
+            else:
+                _sum = 0.0
+                for j in range(i):
+                    _sum += L[k][j]*U[j][i]
+                L[k][i] = (matrix[k][i] - sum) / U[j][i]
+    if int_res:
+        L = [[int(L[i][j]) for i in range(len(L))] for j in range(len(L))]
+        U = [[int(U[i][j]) for i in range(len(U))] for j in range(len(U))]
+    return L,U
