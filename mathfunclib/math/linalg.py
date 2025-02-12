@@ -1,4 +1,5 @@
 from polynomial import poly_val
+from math import sqrt
 
 def argmax(_list):
     '''
@@ -439,6 +440,29 @@ def adjugate_mat(matrix):
     
     return transpose(cofactor_mat(matrix))
 
+# ____________________________________________________________________________ #
+#| Stuff with vectors, some needed as setup for the QR factorization function |#
+#|____________________________________________________________________________|#
+
+def dot_prod(v1,v2):
+    return sum(x*y for x,y in zip(v1,v2))
+
+def vec_add(v1,v2):
+    return [x+y for x,y in zip(v1,v2)]
+
+def vec_subt(v1,v2):
+    return [x-y for x,y in zip(v1,v2)]
+
+def scalar_mult(scalar,vector):
+    return [scalar * x for x in vector]
+
+def vec_norm(v):
+    return sqrt(sum(x*x for x in v))
+
+# ________________________________ #
+#| Matrix decomposition functions |#
+#|________________________________|#
+
 def LU_decomp_mat(matrix,int_res=False):
     '''
     Returns the LU decomposition of a square matrix.
@@ -471,3 +495,35 @@ def LU_decomp_mat(matrix,int_res=False):
         L = [[int(L[i][j]) for i in range(len(L))] for j in range(len(L))]
         U = [[int(U[i][j]) for i in range(len(U))] for j in range(len(U))]
     return L,U
+
+def gram_schmidt(matrix,int_res):
+    '''
+    Uses the Gram-Schmidt process to find the QR decomposition
+    of a matrix.
+    '''
+    if type(matrix)!=list:
+        return "Parameter [matrix] must be a list."
+    if int_res not in [True,False]:
+        return f"[int_res] must be one of True or False, got {int_res} instead."
+    for i in range(1,len(matrix)):
+        if len(matrix[0])!=len(matrix[i]):
+            return "Matrix must be a proper square matrix."
+    
+    n,m = len(matrix),len(matrix[0])
+    Q,R = [[0.0]*m for _ in range(n)], [[0.0]*m for _ in range(m)]
+    for j in range(m):
+        v = [matrix[i][j] for i in range(n)]
+        for i in range(j):
+            q = [Q[k][i] for k in range(n)]
+            R[i][j] = dot_prod(q,v)
+            v = vec_subt(v,scalar_mult(R[i][j],q))
+        R[j][j] = vec_norm(v)
+        q = scalar_mult(1/R[j][j],v)
+        
+        for i in range(n):
+            Q[i][j] = q[i]
+    
+    if int_res:
+        Q = [[int(Q[i][j]) for _ in range(len(Q))]for _ in range(len(Q[0]))]
+        R = [[int(R[i][j]) for _ in range(len(R))]for _ in range(len(R[0]))]
+    return Q,R
