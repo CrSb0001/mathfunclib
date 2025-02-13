@@ -2,6 +2,7 @@
 
 from math import cos,sin,sqrt,exp,ceil,floor,pi,gcd
 from decimal import *
+from .primes import is_prime
 
 def compute_sin(N):
     m,i=10**8,None
@@ -114,6 +115,8 @@ def is_stealthy(n):
     if n==0:
         return True
     if n<0:
+        return False
+    elif is_prime(n):
         return False
     for i in range(1,n//2+2):
         for j in range(1,i+1):
