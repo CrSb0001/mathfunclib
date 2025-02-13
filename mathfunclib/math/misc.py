@@ -100,7 +100,7 @@ def sqrt_dec_expn_sum(n,d):
         return "Parameter [d] must be greater than 0."
     
     getcontext().prec = d+5
-    v = str(Decimal(n).sqrt())[2:p+2]
+    v = str(Decimal(n).sqrt())[3:p+3]
     return sum(int(x) for x in v)
 
 def is_stealthy(n):
