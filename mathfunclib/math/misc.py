@@ -106,7 +106,7 @@ def sqrt_dec_expn_sum(n,d):
 def is_stealthy(n):
     '''
     AKA bipronic numbers (OEIS A072389), this function finds numbers
-    of the form x*(x+1)*y*(y+1) for nonnegative x,y, and where x!=y. We initialize the
+    of the form x*(x+1)*y*(y+1) for nonnegative x,y. We initialize the
     sequence with 0 == 0*(0+1)*1*(1+1).
     '''
     if type(n)!=int:
@@ -123,3 +123,21 @@ def is_stealthy(n):
             if i*(i+1)*j*(j+1):
                 return True
     return False
+
+def can_win_nim_gen(n,k):
+    '''
+    Problem statement:
+    > You are playing Nim with your friend with the rules as follows:
+    > 1. Initially, there is an arbitrary number of stones on the table.
+    > 2. You and your friend will alternate taking turns; you go first.
+    > 3. On each turn, the person whose turn it is will remove 1 to `n`
+         stones from the pile.
+    > 4. The one who removes the last stone is the winner.
+    
+    Goal: Given `k` stones, return True if you can win the game assuming
+          perfect play, else return False.
+    '''
+    if type(n)!=int or type(k)!=int:
+        return "Both parameters must be integers."
+    
+    return True if (n%(k+1)!=0 or n==0) else False
