@@ -1,4 +1,4 @@
-from polynomial import poly_val
+from .polynomial import poly_val
 from math import sqrt
 
 def argmax(_list):
