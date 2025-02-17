@@ -52,7 +52,7 @@ def sum_multiples_under_lim(m,n,lim):
     def res(u,v,d=0):
         if d!=float('inf'):
             q=(v-1)//u
-            return u*q*(q-1)//2
+            return u*q*(q+1)//2
         else: # THIS part is helpful for the bonus Project Euler -1.
             q=(u+v-u*v)//gcd(u+v-u*v,12)
             r=12//gcd(u+v-u*v,12)
