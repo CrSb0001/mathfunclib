@@ -141,3 +141,60 @@ def can_win_nim_gen(n,k):
         return "Both parameters must be integers."
     
     return True if (n%(k+1)!=0 or n==0) else False
+
+def proj_euler_255(n,req_prec = 10):
+    '''
+    Define the rounded square root to be the square root
+    of an integer rounded to the closest integer.
+    
+    The following method (basically Heron's method adapted
+                          to integer arithmetic) is as follows:
+    
+    * Let `d` be the number of digits in `n`.
+        * If d % 2 == 1, then x0 = 2 * 10 ** ((d - 1) // 2)
+        * Else, we set x0 = 7 * 10 ** ((d - 2) // 2)
+    * We then repeatedly compute
+      x_(k+1) = floor((x_k + ceil(n / x_k)) / 2) until we get x_(k+1) == x_k.
+    
+    This function gives the average number of iterations required to find
+    the rounded square root of an `n`-digit number
+    (that is for 10**(n-1) <= x < 10**n), given to {req_prec} decimal places.
+    '''
+    if type(n)!=int or type(req_prec)!=int:
+        return "Both the required and hidden parameter must be integers."
+    if n<=0 or req_prec<=0:
+        return "Disallowed input values detected."
+    
+    global steps
+    steps = 0
+    
+    def count(x_prev, begin, end, step=0):
+        global steps
+        b = begin
+        step += 1
+        
+        while b < end:
+            d = (b + x_prev - 1) // x_prev
+            last = x_prev * d
+            
+            e = min(end, last + 1)
+            x_next = (x_prev + d) >> 1 # Can also be `x_next = (x_prev + d) // 2`
+            
+            if x_next == x_prev:
+                steps += (e - b) * step
+            else:
+                count(x_next, b, e, step)
+            b = e
+    
+    D = n
+    B = 10**(n-1)
+    E = 10**n
+    
+    x0 = 2 if D % 2 == 1 else 7
+    for d in range(2, D, 2):
+        x0 *= 10
+    
+    count(x0, B, E)
+    
+    avg_steps = steps / (E - B)
+    return f"{avg_steps:.{req_prec}f}"
