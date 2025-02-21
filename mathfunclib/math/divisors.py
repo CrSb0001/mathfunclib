@@ -10,7 +10,7 @@ def divisors(n, proper = False):
     if proper not in [True, False]:
         return f"Parameter [proper] must be one of True or False, got {proper} instead."
     
-    pf = prime_factor(n)
+    pf = prime_factors(n)
     primes = [x for x in pf]
     l = len(primes)
     
